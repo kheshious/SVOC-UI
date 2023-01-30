@@ -1,1 +1,38 @@
-<p>data-display works!</p>
+<div class="toolbar" role="banner" id="nav">
+    <img class="standardbanklogo" src="../../../assets/images/Standard_Bank_of_South_Africa_logo.png">
+  
+</div><br><br><br><br>
+<button class="btnBack" routerLink="/navigations">
+    <img class="backButton" src="../../../assets/images/backButton.png">
+    <label class="backLabel">Back</label>  
+</button>
+<br>
+<br>
+
+
+<div class="container h">
+<body>
+    <table id="example" class="table table-striped table-hover table-bordered">
+        <thead>
+          <tr class="sticky-top">
+            <th class="col" scope="col">#</th>
+            <th scope="col">Enterprise-ID</th>
+            <th scope="col">Super-EID</th>
+            <th scope="col">BP-Number</th>
+            <th scope="col">Preffered BP Indicator</th>
+          </tr>
+        </thead>
+        <tbody style="height: 8vh;">
+          <tr *ngFor="let row of sampleData; index as i">
+            <td scope="row">{{i+1}}</td>
+            <td scope="row">{{row.E_id}}</td>
+            <td scope="row">{{row.S_id}}</td>
+            <td scope="row">{{row.bp_number}}</td>
+            <td scope="row">{{row.preffered_bp}}</td>
+          </tr>
+        </tbody>
+      </table>
+</body>
+</div>
+
+
