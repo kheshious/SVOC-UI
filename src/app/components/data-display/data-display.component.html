@@ -2,37 +2,62 @@
     <img class="standardbanklogo" src="../../../assets/images/Standard_Bank_of_South_Africa_logo.png">
   
 </div><br><br><br><br>
-<button class="btnBack" routerLink="/navigations">
+<!-- <button class="btnBack" routerLink="/navigations">
     <img class="backButton" src="../../../assets/images/backButton.png">
     <label class="backLabel">Back</label>  
 </button>
-<br>
-<br>
+<br> -->
+<div class="searchBox">
+  <label class="labelEIID">Enterprise-ID/Business partner_ID </label>
+  <form [formGroup]="searchForm" (ngSubmit)="onSubmit()">
+    <input formControlName="ID" class="inputBox">
+    <button class="submitBtn" type="submit">Submit</button>
+  </form>
+</div><br>
 
+<p *ngIf="idType != ''">Searched by {{idType}}: {{searchForm.value.ID}}</p>
 
 <div class="container h">
-<body>
-    <table id="example" class="table table-striped table-hover table-bordered">
+  <body>
+    <table *ngIf="idType != ''" id="example" class="table table-striped table-hover table-bordered" >
         <thead>
           <tr class="sticky-top">
-            <th class="col" scope="col">#</th>
+            <!-- <th class="col" scope="col">#</th> -->
             <th scope="col">Enterprise-ID</th>
             <th scope="col">Super-EID</th>
             <th scope="col">BP-Number</th>
             <th scope="col">Preffered BP Indicator</th>
           </tr>
         </thead>
-        <tbody style="height: 8vh;">
-          <tr *ngFor="let row of sampleData; index as i">
-            <td scope="row">{{i+1}}</td>
-            <td scope="row">{{row.E_id}}</td>
-            <td scope="row">{{row.S_id}}</td>
-            <td scope="row">{{row.bp_number}}</td>
-            <td scope="row">{{row.preffered_bp}}</td>
+        <tbody style="font-size: 12px" *ngIf="tableData.length > 0">
+          <tr *ngFor="let row of tableData | paginate: {
+              itemsPerPage: tableSize,
+              currentPage: page,
+              totalItems: count
+            };
+            let i = index">
+            <td scope="row">{{row.enterpriseid}}</td>
+            <td scope="row">{{row.super_EID}}</td>
+            <td scope="row">{{row.systemIdNumber}}</td>
+            <td scope="row">{{row.prefered_BP}}</td>
           </tr>
         </tbody>
+        <tbody *ngIf="tableData.length == 0 || tableData.length == null">
+          <tr class="noRecords">No record found</tr>
+        </tbody>
       </table>
-</body>
+
+      <div class="d-flex justify-content-center">
+        <p *ngIf="idType != ''">{{tableData.length}} records found</p>
+        <pagination-controls
+        *ngIf="tableData.length > 10"
+          previousLabel="Prev"
+          nextLabel="Next"
+          (pageChange)="onTableDataChange($event)"
+        >
+        </pagination-controls>
+      </div>
+  </body>
 </div>
 
 

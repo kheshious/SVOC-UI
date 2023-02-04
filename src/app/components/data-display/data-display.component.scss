@@ -3,8 +3,9 @@
     font-size: 14px;
     color: #333;
     box-sizing: border-box;
-    -webkit-font-smoothing: antialiased;
+    // -webkit-font-smoothing: antialiased;
     -moz-osx-font-smoothing: grayscale;
+    
   }
   h1,h2,h3,h4,h5,h6 
   {
@@ -62,23 +63,20 @@
     height: 18px;
     margin-top: 2px;
   }
-  .btnBack{
-    display:flex;
-    width: 70px;
-    height: 25px;
-    border-radius: none;
-    background-color: D9D9D9;
-    border:solid black 1px ;
-    margin-left: 25.5px;
-  }
-  .backLabel{
-    margin-left: 5px;
-    padding-top: 0px;
+  // .btnBack{
+  //   display:flex;
+  //   width: 70px;
+  //   height: 25px;
+  //   border-radius: none;
+  //   background-color: D9D9D9;
+  //   border:solid black 1px ;
+  //   margin-left: 5.5%;
+  //   padding-top: 0px;
 
-  }
+  // }
   .h{
     padding: 0px 0px 20px 0px;
-    height: 80vh;
+    height: 76vh;
   
 }
 
@@ -86,6 +84,44 @@
     color: white;
     background-color: black;
 }
-table{
-  margin-left: -35px;
+// table{
+//   margin-left: 3%;
+ 
+// }
+.d-flex{
+  float: right;
+  font-size: smaller;
+}
+th{
+  background-color: #1976d2;
+  height: 37px !important;
+}
+tr{
+  height:37px !important;
+}
+.labelEIID{
+  margin-left: 20%;
+  color:black;
+  font-weight: 550;
+  margin-top: 8px;
+ 
+}
+.inputBox{
+  border: solid black 2px;
+  width: 30%;
+  margin-left: 0.5%;
+}
+.searchBox{
+  display: flex;
+}
+.submitBtn{
+  margin-left: 0.5%;
+  border: solid black 1px;
+  background-color: D9D9D9;
+  font-weight: 500;
+}
+
+.noRecords{
+  color: red;
+  text-size-adjust: 40px !important;
 }

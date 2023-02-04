@@ -67,6 +67,10 @@
         },
         "serve": {
           "builder": "@angular-devkit/build-angular:dev-server",
+          // "options": {
+          //   "browserTarget": "svoc-ui:build",
+          //   "port": 4401
+          // },
           "configurations": {
             "production": {
               "browserTarget": "svoc-ui:build:production"
