@@ -1,21 +1,21 @@
 <div class="toolbar" role="banner" id="nav">
     <img class="standardbanklogo" src="../../../assets/images/Standard_Bank_of_South_Africa_logo.png">
   
-</div><br><br><br><br>
+</div><br><br><br>
 <!-- <button class="btnBack" routerLink="/navigations">
     <img class="backButton" src="../../../assets/images/backButton.png">
     <label class="backLabel">Back</label>  
 </button>
 <br> -->
 <div class="searchBox">
-  <label class="labelEIID">Enterprise-ID/Business partner_ID </label>
+  
   <form [formGroup]="searchForm" (ngSubmit)="onSubmit()">
+    <label class="labelEIID">Filter by <strong>Enterprise-ID/Business partner_ID</strong> </label>
     <input formControlName="ID" class="inputBox">
     <button class="submitBtn" type="submit">Submit</button>
   </form>
 </div><br>
-
-<p *ngIf="idType != ''">Searched by {{idType}}: {{searchForm.value.ID}}</p>
+<p *ngIf="idType != ''" class="searchedBY">Searched by <strong>"{{idType}}"</strong> : {{searchForm.value.ID}}</p>
 
 <div class="container h">
   <body>
@@ -47,15 +47,22 @@
         </tbody>
       </table>
 
-      <div class="d-flex justify-content-center">
-        <p *ngIf="idType != ''">{{tableData.length}} records found</p>
-        <pagination-controls
-        *ngIf="tableData.length > 10"
-          previousLabel="Prev"
-          nextLabel="Next"
-          (pageChange)="onTableDataChange($event)"
-        >
-        </pagination-controls>
+      <div class="row">
+        <div class="col-xs-5 col-md-4">
+          <p *ngIf="idType != ''">
+            {{tableData.length}} records found
+          </p>
+        </div>
+        
+        <div class="col-xs-7 col-md-8">
+          <pagination-controls
+          *ngIf="tableData.length > 10"
+            previousLabel="Prev"
+            nextLabel="Next"
+            (pageChange)="onTableDataChange($event)"
+          >
+          </pagination-controls>
+        </div>
       </div>
   </body>
 </div>
