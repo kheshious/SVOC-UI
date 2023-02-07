@@ -8,7 +8,7 @@ const routes: Routes = [
   {path: 'sign-in', component: SignInComponent},
   {path:'navigations', component: NavigationBarComponent},
   {path: 'data-display', component: DataDisplayComponent},
-  {path : '',pathMatch:'full',component: NavigationBarComponent}
+  {path : '',pathMatch:'full',component: DataDisplayComponent}
  
 ];
 

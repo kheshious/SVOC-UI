@@ -10,13 +10,15 @@ import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
 import {NgxPaginationModule} from 'ngx-pagination';
 import { HttpClientModule } from '@angular/common/http';
 import { ReactiveFormsModule } from '@angular/forms';
+import { LoaderComponent } from './loader/loader.component';
 
 @NgModule({
   declarations: [
     AppComponent,
     NavigationBarComponent,
     SignInComponent,
-    DataDisplayComponent
+    DataDisplayComponent,
+    LoaderComponent
   ],
   imports: [
     BrowserModule,

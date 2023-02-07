@@ -29,6 +29,9 @@ export class DataDisplayComponent implements OnInit {
   ) {}
 
   ngOnInit(): void {
+    this.dataService.getAllSvocDta().subscribe((data: SvocData[]) => {
+      this.tableData = data;
+    });
   }
 
   onSubmit(){
@@ -37,13 +40,13 @@ export class DataDisplayComponent implements OnInit {
 
     if(id!.length > 20){
       this.idType = 'Enteprice_ID';
-       //this.getDataByEId(id);
-      this.tableData = this.dataService.getDummyData();
+       this.getDataByEId(id);
+      // this.tableData = this.dataService.getDummyData();
     }
     else{
       this.idType = 'Business_partner_ID';
-      //this.getDataByBPId(id);
-      this.tableData = this.dataService.getDummyData();
+      this.getDataByBPId(id);
+      // this.tableData = this.dataService.getDummyData();
     }
     console.log("ID_type", this.idType);
   }

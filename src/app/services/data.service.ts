@@ -766,12 +766,18 @@ export class DataService {
 
   constructor(private http: HttpClient) {}
 
+  getAllSvocDta(): Observable<SvocData[]> 
+  {
+    return this.http.get<SvocData[]>(`${this.baseUrl}?pageNumber=0&pageSize=1000`).pipe(retry(1), shareReplay());
+    // return this.http.get<SvocData[]>("https://svocapi.azurewebsites.net/version1/customer?pageNumber=0&pageSize=10").pipe(retry(1), shareReplay());
+  }
+
   getSvocDataByEId(E_id: string): Observable<SvocData[]> {
-    return this.http.get<SvocData[]>(`${this.baseUrl}eids?enterprise_id=${E_id}`).pipe(retry(1), shareReplay());
+    return this.http.get<SvocData[]>(`${this.baseUrl}/eids?enterprise_id=${E_id}`).pipe(retry(1), shareReplay());
   }
 
   getSvocDataByBpId(bp_id: string): Observable<SvocData[]>{
-    return this.http.get<SvocData[]>(`${this.baseUrl}sysids?system_id_number=${bp_id}`).pipe(retry(1), shareReplay());
+    return this.http.get<SvocData[]>(`${this.baseUrl}/sysids?system_id_number=${bp_id}`).pipe(retry(1), shareReplay());
   }
 
   getDummyData(){
