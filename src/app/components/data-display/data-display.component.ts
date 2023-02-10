@@ -4,6 +4,7 @@ import { SvocData } from 'src/app/models/svoc-data';
 // import {NgxPaginationModule} from 'ngx-pagination';
 import { DataService } from 'src/app/services/data.service';
 
+
 @Component({
   selector: 'app-data-display',
   templateUrl: './data-display.component.html',
@@ -18,6 +19,7 @@ export class DataDisplayComponent implements OnInit {
   tableSizes: any = [3, 6, 9, 12];
   tableData: SvocData[] = [];
   idType: string = '';
+  reload: boolean = false;
   searchId: string = '';
   searchForm = this.formBuilder.group({
     ID: ' ',
@@ -33,6 +35,8 @@ export class DataDisplayComponent implements OnInit {
       this.tableData = data;
     });
   }
+
+  reloadTheWindow() {window.location.reload();}
 
   onSubmit(){
     console.log(this.searchForm.value);
@@ -54,12 +58,14 @@ export class DataDisplayComponent implements OnInit {
   getDataByEId(id: any){
     this.dataService.getSvocDataByEId(id).subscribe((data: SvocData[]) => {
       this.tableData = data;
+      this.reload = true;
     });
   }
 
   getDataByBPId(id: any){
     this.dataService.getSvocDataByBpId(id).subscribe((data: SvocData[]) => {
       this.tableData = data;
+      this.reload = true;
     });
   } 
 

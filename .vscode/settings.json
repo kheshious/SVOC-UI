@@ -1,0 +1,4 @@
+{
+    "appService.defaultWebAppToDeploy": "/subscriptions/57741928-95d4-4b19-befc-cc26a2e7923b/AppServices/subscriptions/57741928-95d4-4b19-befc-cc26a2e7923b/resourceGroups/SAN-Data-and-Analytics-Sandbox/providers/Microsoft.Web/sites/svoc-ui",
+    "appService.deploySubpath": "dist\\svoc-ui"
+}

@@ -19,6 +19,8 @@
   </div><br>
   <p *ngIf="idType != ''" class="searchedBY">Searched by <strong>"{{idType}}"</strong> : {{searchForm.value.ID}}</p>
   
+  <div class="reload" *ngIf="reload == true && searchForm.value.ID == '' && tableData.length > 0 && idType != ''">{{reloadTheWindow()}}</div>
+
   <div class="container h">
     <body>
       <table id="example" class="table table-striped table-hover table-bordered" >
@@ -38,7 +40,7 @@
                 totalItems: count
               };
               let i = index">
-              <td scope="row">{{row.enterpriseid}}</td>
+              <td scope="row">{{row.enterpriseId}}</td>
               <td scope="row">{{row.super_EID}}</td>
               <td scope="row">{{row.systemIdNumber}}</td>
               <td scope="row">{{row.prefered_BP}}</td>
