@@ -1,8 +1,9 @@
+import { HttpErrorResponse } from '@angular/common/http';
 import { Component, OnInit } from '@angular/core';
 import { FormBuilder } from '@angular/forms';
 import { SvocData } from 'src/app/models/svoc-data';
-// import {NgxPaginationModule} from 'ngx-pagination';
 import { DataService } from 'src/app/services/data.service';
+import Swal from 'sweetalert2';
 
 
 @Component({
@@ -22,8 +23,9 @@ export class DataDisplayComponent implements OnInit {
   reload: boolean = false;
   searchId: string = '';
   searchForm = this.formBuilder.group({
-    ID: ' ',
+    ID: '',
   });
+  noRecords: boolean = false;
 
   constructor(
     private dataService: DataService,
@@ -38,32 +40,42 @@ export class DataDisplayComponent implements OnInit {
   reloadTheWindow() {window.location.reload();}
 
   onSubmit(){
-    console.log(this.searchForm.value);
-    let id = this.searchForm.value.ID;
+    let id = this.searchForm.value.ID + ',';
+    if(id?.indexOf(',')){
+      id = id.substring(0, id.indexOf(","));
+    }
 
     if(id!.length > 20){
-      this.idType = 'Enteprice_ID';
-      //  this.getDataByEId(id);
-      this.tableData = this.dataService.getDummyData();
+      this.idType = 'Enterprise_ID';
+       this.getDataByEId(this.searchForm.value.ID);
+      // this.tableData = this.dataService.dummyError();
     }
     else{
       this.idType = 'Business_partner_ID';
-      // this.getDataByBPId(id);
-      this.tableData = this.dataService.getDummyData();
+      this.getDataByBPId(this.searchForm.value.ID);
+      // this.tableData = this.dataService.dummyError();
     }
-    console.log("ID_type", this.idType);
   }
 
   getSvocData(){
     this.dataService.getAllSvocDta().subscribe((data: SvocData[]) => {
       this.tableData = data;
-    });
+    },(error: HttpErrorResponse) => {
+      if(error.status == null){
+          this.errorAlert(error.message, `Try reloading the browser`, 'error');
+      }
+      else{
+        this.errorAlert(error.statusText, `Status: ${error.status}`, 'error');
+      }
+  });
   }
 
   getDataByEId(id: any){
     this.dataService.getSvocDataByEId(id).subscribe((data: SvocData[]) => {
       this.tableData = data;
       this.reload = true;
+    },(error:HttpErrorResponse)=>{
+      this.noRecordsFound();
     });
   }
 
@@ -71,18 +83,34 @@ export class DataDisplayComponent implements OnInit {
     this.dataService.getSvocDataByBpId(id).subscribe((data: SvocData[]) => {
       this.tableData = data;
       this.reload = true;
+    },(error:HttpErrorResponse)=>{
+      this.noRecordsFound();
     });
   } 
 
   onTableDataChange(event: any) {
     this.page = event;
-    // this.getData();
   }
 
   onTableSizeChange(event: any): void {
     this.tableSize = event.target.value;
     this.page = 1;
-    // this.getData();
+  }
+
+  errorAlert(title: string, text: string, icon: string){
+    Swal.fire({
+      title: title,
+      text: text,
+      icon: 'error'
+    }).then((result) => {
+      this.reloadTheWindow();
+    });
+  }
+
+  noRecordsFound(){
+    this.tableData = [];
+    this.reload = true;
+    this.noRecords = true;
   }
 
 }

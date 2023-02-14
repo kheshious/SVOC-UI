@@ -1,6 +1,7 @@
 import { Injectable } from '@angular/core';
 import { HttpClient, HttpHeaders } from '@angular/common/http';
 import { Observable, retry, shareReplay } from 'rxjs';
+import {catchError, timeout} from 'rxjs/operators'
 import { SvocData } from '../models/svoc-data';
 import { environment } from 'src/environments/environment';
 
@@ -769,21 +770,29 @@ export class DataService {
 
   constructor(private http: HttpClient) {}
 
-  getAllSvocDta(): Observable<SvocData[]> 
+  getAllSvocDta()
   {
-    return this.http.get<SvocData[]>(`${this.baseUrl}?pageNumber=0&pageSize=${this.rows}`, {headers: this.headers}).pipe(retry(1), shareReplay());
+    return this.http.get<SvocData[]>(`${this.baseUrl}?pageNumber=0&pageSize=${this.rows}`, {headers: this.headers}).pipe(
+      retry(0), shareReplay(), timeout(60000)
+      );
   }
 
   getSvocDataByEId(E_id: string): Observable<SvocData[]> {
-    return this.http.get<SvocData[]>(`${this.baseUrl}/eids?enterprise_id=${E_id}`, {headers: this.headers}).pipe(retry(1), shareReplay());
+    return this.http.get<SvocData[]>(`${this.baseUrl}/eids?enterprise_id=${E_id}`, {headers: this.headers}).pipe(retry(0), shareReplay());
   }
 
   getSvocDataByBpId(bp_id: string): Observable<SvocData[]>{
-    return this.http.get<SvocData[]>(`${this.baseUrl}/sysids?system_id_number=${bp_id}`, {headers: this.headers}).pipe(retry(1), shareReplay());
+    return this.http.get<SvocData[]>(`${this.baseUrl}/sysids?system_id_number=${bp_id}`, {headers: this.headers}).pipe(retry(0), shareReplay());
   }
 
   getDummyData(){
     return dummyData;
+  }
+
+  dummyError(){
+    return [];
+    ;
+    
   }
 
 }
