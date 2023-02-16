@@ -45,21 +45,27 @@ export class DataDisplayComponent implements OnInit {
       id = id.substring(0, id.indexOf(","));
     }
 
-    if(id!.length > 20){
+    if(id?.length === 30){
       this.idType = 'Enterprise_ID';
        this.getDataByEId(this.searchForm.value.ID);
       // this.tableData = this.dataService.dummyError();
     }
-    else{
+    else if(id?.length === 10 || id?.length === 9){
       this.idType = 'Business_partner_ID';
       this.getDataByBPId(this.searchForm.value.ID);
       // this.tableData = this.dataService.dummyError();
+    }
+    else{
+      this.idType = 'Invalid ID';
+      this.noRecordsFound();
+      this.updateProperties();
     }
   }
 
   getSvocData(){
     this.dataService.getAllSvocDta().subscribe((data: SvocData[]) => {
       this.tableData = data;
+      this.reload = true;
     },(error: HttpErrorResponse) => {
       if(error.status == null){
           this.errorAlert(error.message, `Try reloading the browser`, 'error');
@@ -73,7 +79,8 @@ export class DataDisplayComponent implements OnInit {
   getDataByEId(id: any){
     this.dataService.getSvocDataByEId(id).subscribe((data: SvocData[]) => {
       this.tableData = data;
-      this.reload = true;
+      // this.reload = true;
+      this.updateProperties()
     },(error:HttpErrorResponse)=>{
       this.noRecordsFound();
     });
@@ -82,7 +89,8 @@ export class DataDisplayComponent implements OnInit {
   getDataByBPId(id: any){
     this.dataService.getSvocDataByBpId(id).subscribe((data: SvocData[]) => {
       this.tableData = data;
-      this.reload = true;
+      // this.reload = true;
+      this.updateProperties()
     },(error:HttpErrorResponse)=>{
       this.noRecordsFound();
     });
@@ -111,6 +119,15 @@ export class DataDisplayComponent implements OnInit {
     this.tableData = [];
     this.reload = true;
     this.noRecords = true;
+  }
+
+  updateProperties(){
+    // this.reload = true;
+    this.noRecords = false;
+  }
+
+  clearIdType(){
+    this.idType = '';
   }
 
 }

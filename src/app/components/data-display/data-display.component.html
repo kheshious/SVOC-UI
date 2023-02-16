@@ -3,7 +3,7 @@
   
 </div><br><br><br>
 
-<app-loader *ngIf="!tableData.length && !searchForm.value.ID?.length"></app-loader>
+<app-loader *ngIf="!tableData.length && !searchForm.value.ID?.length">{{getSvocData()}}</app-loader>
 
 <div class="container-fluid" *ngIf="tableData.length > 0 || searchForm.value.ID?.length">
   <div class="searchBox">
@@ -15,17 +15,17 @@
   </div><br>
   <p *ngIf="idType != ''" class="searchedBY">Searched by <strong>"{{idType}}"</strong> : {{searchForm.value.ID}}</p>
   
-  <div class="reload" *ngIf="reload == true && searchForm.value.ID == '' && tableData.length > 0 && idType != ''">{{getSvocData()}}</div>
+  <div class="reload" *ngIf="reload === true && searchForm.value.ID === '' && tableData.length >= 0 && idType !== ''">{{getSvocData()}}{{clearIdType()}}</div>
 
   <div class="container h">
     <body>
-      <table id="example" class="table table-striped table-hover table-bordered" >
+      <table id="example" class="table table-striped table-hover table-bordered">
           <thead>
             <tr class="sticky-top">
               <th scope="col">Enterprise-ID</th>
               <th scope="col">Super-EID</th>
               <th scope="col">BP-Number</th>
-              <th scope="col">Preffered BP Indicator</th>
+              <th scope="col">Preferred BP Indicator</th>
             </tr>
           </thead>
           <tbody style="font-size: 12px" *ngIf="tableData.length > 0">

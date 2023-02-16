@@ -766,7 +766,7 @@ export class DataService {
   private baseUrl = environment.svocBaseUrl;
   private aKey = environment.key;
   private headers = new HttpHeaders({'Ocp-Apim-Subscription-Key': this.aKey});
-  private rows = 5000;
+  private rows = 1000;
 
   constructor(private http: HttpClient) {}
 
