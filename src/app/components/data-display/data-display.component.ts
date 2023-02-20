@@ -23,7 +23,7 @@ export class DataDisplayComponent implements OnInit {
   reload: boolean = false;
   searchId: string = '';
   searchForm = this.formBuilder.group({
-    ID: '',
+  ID: '',
   });
   noRecords: boolean = false;
 

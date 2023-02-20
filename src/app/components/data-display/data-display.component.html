@@ -13,11 +13,12 @@
       <button class="submitBtn" type="submit">Submit</button>
     </form>
   </div><br>
-  <p *ngIf="idType != ''" class="searchedBY">Searched by <strong>"{{idType}}"</strong> : {{searchForm.value.ID}}</p>
+  
   
   <div class="reload" *ngIf="reload === true && searchForm.value.ID === '' && tableData.length >= 0 && idType !== ''">{{getSvocData()}}{{clearIdType()}}</div>
 
   <div class="container h">
+    <p *ngIf="idType != ''" class="searchedBY">Searched by <strong>"{{idType}}"</strong> : {{searchForm.value.ID}}</p>
     <body>
       <table id="example" class="table table-striped table-hover table-bordered">
           <thead>
