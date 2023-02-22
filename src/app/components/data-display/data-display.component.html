@@ -5,19 +5,38 @@
 
 <app-loader *ngIf="!tableData.length && !searchForm.value.ID?.length">{{getSvocData()}}</app-loader>
 
-<div class="container-fluid" *ngIf="tableData.length > 0 || searchForm.value.ID?.length">
-  <div class="searchBox">
-    <form [formGroup]="searchForm" (ngSubmit)="onSubmit()">
-      <label class="labelEIID"><strong>Enterprise-ID/Business partner_ID</strong> </label>
-      <input formControlName="ID" class="inputBox">
-      <button class="submitBtn" type="submit">Submit</button>
-    </form>
-  </div><br>
-  
   
   <div class="reload" *ngIf="reload === true && searchForm.value.ID === '' && tableData.length >= 0 && idType !== ''">{{getSvocData()}}{{clearIdType()}}</div>
 
-  <div class="container h">
+<div class="container h">
+   <div class="filter">   
+    <form *ngIf="tableData.length>0">
+      <label> Filter by: </label>
+      <select (change)="updateIDs($event)" >
+        <option value="default">Select</option>
+        <option *ngFor="let dropDown of dropDownOptions"><label>{{dropDown}}</label></option>
+      </select>
+    </form><br>
+   </div>
+
+    <div class="container-fluid" *ngIf="tableData.length > 0 || searchForm.value.ID?.length">
+      <div class="searchBox" *ngIf="IDSelect === 'Business partner-ID'">
+        <form [formGroup]="searchForm" (ngSubmit)="getDataByBusiness_partner_ID()">
+          <label class="labelEIID"><strong>Business partner_ID</strong> </label>
+          <input formControlName="ID" class="inputBox">
+          <button class="submitBtn" type="submit">Submit</button>
+        </form>
+      </div>
+      
+      <div class="container-fluid" *ngIf="tableData.length > 0 || searchForm.value.ID?.length">
+        <div class="searchBox" *ngIf="IDSelect === 'Enterprise-ID'">
+          <form [formGroup]="searchForm" (ngSubmit)="getDataByEnterprise_ID()">
+            <label class="labelEIID"><strong>Enterprise-ID</strong> </label>
+            <input formControlName="ID" class="inputBox">
+            <button class="submitBtn" type="submit">Submit</button>
+          </form>
+        </div><br>
+
     <p *ngIf="idType != ''" class="searchedBY">Searched by <strong>"{{idType}}"</strong> : {{searchForm.value.ID}}</p>
     <body>
       <table id="example" class="table table-striped table-hover table-bordered">

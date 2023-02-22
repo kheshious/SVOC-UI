@@ -22,6 +22,7 @@ export class DataDisplayComponent implements OnInit {
   idType: string = '';
   reload: boolean = false;
   searchId: string = '';
+  IDSelect: string='';
   searchForm = this.formBuilder.group({
   ID: '',
   });
@@ -39,7 +40,25 @@ export class DataDisplayComponent implements OnInit {
 
   reloadTheWindow() {window.location.reload();}
 
-  onSubmit(){
+  getDataByBusiness_partner_ID(){
+    let id = this.searchForm.value.ID + ',';
+    if(id?.indexOf(',')){
+      id = id.substring(0, id.indexOf(","));
+    }
+
+    if(id?.length === 10 || id?.length === 9){
+      this.idType = 'Business_partner_ID';
+      this.getDataByBPId(this.searchForm.value.ID);
+      // this.tableData = this.dataService.dummyError();
+    }
+    else{
+      this.idType = 'Invalid Business_partner_ID';
+      this.noRecordsFound();
+      this.updateProperties();
+    }
+  }
+
+  getDataByEnterprise_ID(){
     let id = this.searchForm.value.ID + ',';
     if(id?.indexOf(',')){
       id = id.substring(0, id.indexOf(","));
@@ -50,13 +69,8 @@ export class DataDisplayComponent implements OnInit {
        this.getDataByEId(this.searchForm.value.ID);
       // this.tableData = this.dataService.dummyError();
     }
-    else if(id?.length === 10 || id?.length === 9){
-      this.idType = 'Business_partner_ID';
-      this.getDataByBPId(this.searchForm.value.ID);
-      // this.tableData = this.dataService.dummyError();
-    }
     else{
-      this.idType = 'Invalid ID';
+      this.idType = 'Invalid Enterprise_ID';
       this.noRecordsFound();
       this.updateProperties();
     }
@@ -129,5 +143,16 @@ export class DataDisplayComponent implements OnInit {
   clearIdType(){
     this.idType = '';
   }
+  dropDownOptions : string[] =
+  [
+    "Enterprise-ID",
+    "Business partner-ID"
+  ];
+
+  updateIDs(dropDown: any){
+    this.IDSelect = dropDown.target.value;
+  };
+
+
 
 }
