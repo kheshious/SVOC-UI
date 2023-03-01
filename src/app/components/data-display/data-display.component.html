@@ -5,8 +5,16 @@
 
 <app-loader *ngIf="!tableData.length && !searchForm.value.ID?.length">{{getSvocData()}}</app-loader>
 
+
   
   <div class="reload" *ngIf="reload === true && searchForm.value.ID === '' && tableData.length >= 0 && idType !== ''">{{getSvocData()}}{{clearIdType()}}</div>
+
+  <div class="Block" *ngIf="tableData.length>0">
+    <label id="lbl">Upload</label>
+    <input type='file' (change)="upload($event)">
+  </div>
+
+
 
 <div class="container h">
    <div class="filter">   

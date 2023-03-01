@@ -26,8 +26,7 @@ import { LoaderComponent } from './components/loader/loader.component';
     BrowserAnimationsModule,
     NgxPaginationModule,
     HttpClientModule,
-    ReactiveFormsModule,
-  
+    ReactiveFormsModule
   ],
   providers: [],
   bootstrap: [AppComponent]

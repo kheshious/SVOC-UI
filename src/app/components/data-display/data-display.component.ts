@@ -1,8 +1,9 @@
-import { HttpErrorResponse } from '@angular/common/http';
+import { HttpClient, HttpErrorResponse } from '@angular/common/http';
 import { Component, OnInit } from '@angular/core';
-import { FormBuilder } from '@angular/forms';
+import { FormBuilder, FormGroup } from '@angular/forms';
 import { SvocData } from 'src/app/models/svoc-data';
 import { DataService } from 'src/app/services/data.service';
+import { AfterViewInit,ChangeDetectorRef} from '@angular/core';
 import Swal from 'sweetalert2';
 
 
@@ -12,7 +13,7 @@ import Swal from 'sweetalert2';
   styleUrls: ['./data-display.component.scss']
 })
 export class DataDisplayComponent implements OnInit {
-
+  form: FormGroup;
   sercheVal: any
   page: number = 1;
   count: number = 0;
@@ -23,19 +24,34 @@ export class DataDisplayComponent implements OnInit {
   reload: boolean = false;
   searchId: string = '';
   IDSelect: string='';
-  searchForm = this.formBuilder.group({
-  ID: '',
-  });
+  fileID: string='';
+  fileName: string = '';
+  searchForm: FormGroup;
   noRecords: boolean = false;
+  private f_id: string = "";
+  fileText: string = "";
+  // public fb: FormBuilder
 
   constructor(
     private dataService: DataService,
     private formBuilder: FormBuilder,
-  ) {}
+    private http: HttpClient
+  ) {
+
+    this.form = this.formBuilder.group({
+      img: [File]
+    })
+
+    this.searchForm = this.formBuilder.group({
+      ID: '',
+    });
+  }
 
   ngOnInit(): void {
     this.getSvocData();
+    
     // this.tableData = this.dataService.getDummyData();
+    
   }
 
   reloadTheWindow() {window.location.reload();}
@@ -88,6 +104,15 @@ export class DataDisplayComponent implements OnInit {
         this.errorAlert(error.statusText, `Status: ${error.status}`, 'error');
       }
   });
+  }
+
+  getSvocDataByFile(file: any){
+    this.dataService.getSvocDataByFileEID(file).subscribe((data:SvocData[]) =>{
+      console.log(data);
+      this.tableData= data;
+    },(Error:HttpErrorResponse)=>{
+      this.noRecordsFound();
+    });
   }
 
   getDataByEId(id: any){
@@ -153,6 +178,11 @@ export class DataDisplayComponent implements OnInit {
     this.IDSelect = dropDown.target.value;
   };
 
-
-
+  upload($event: any){
+    const file = $event.target.files.item(0);
+    this.dataService.getSvocDataByFileEID(file).subscribe(res => {
+      console.log(res);
+    });
+  }
+  
 }

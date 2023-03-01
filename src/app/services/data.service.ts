@@ -784,6 +784,20 @@ export class DataService {
   getSvocDataByBpId(bp_id: string): Observable<SvocData[]>{
     return this.http.get<SvocData[]>(`${this.baseUrl}/sysids?system_id_number=${bp_id}`, {headers: this.headers}).pipe(retry(0), shareReplay());
   }
+  getSvocDataByFileBPID(file: any): Observable<any>
+  {
+    const uploadedFile = new FormData();
+    // uploadedFile.append( 'file', file, file.name);
+    uploadedFile.append( 'file', new Blob([file], { type: 'text/csv' }), file.name);
+    return this.http.post<SvocData[]>(`${this.baseUrl}/upload-sysId-file`, uploadedFile, {headers: this.headers}).pipe(retry(0), shareReplay());
+  }
+  getSvocDataByFileEID(file: any): Observable<any>
+  {
+    const uploadedFile = new FormData();
+    // uploadedFile.append( 'file', file, file.name);
+    uploadedFile.append( 'file', new Blob([file], { type: 'text/csv' }), file.name);
+    return this.http.post<SvocData[]>(`${this.baseUrl}/upload-enterpriseId-file`, uploadedFile, {headers: this.headers}).pipe(retry(0), shareReplay());
+  }
 
   getDummyData(){
     return dummyData;
@@ -793,6 +807,10 @@ export class DataService {
     return [];
     ;
     
+  }
+
+  returntoken(){
+    return this.headers;
   }
 
 }
