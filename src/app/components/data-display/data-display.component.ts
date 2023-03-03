@@ -56,6 +56,8 @@ export class DataDisplayComponent implements OnInit {
 
   reloadTheWindow() {window.location.reload();}
 
+  
+
   getDataByBusiness_partner_ID(){
     let id = this.searchForm.value.ID + ',';
     if(id?.indexOf(',')){
@@ -106,10 +108,21 @@ export class DataDisplayComponent implements OnInit {
   });
   }
 
-  getSvocDataByFile(file: any){
-    this.dataService.getSvocDataByFileEID(file).subscribe((data:SvocData[]) =>{
-      console.log(data);
-      this.tableData= data;
+  getSvocDataByFileBPID($event: any){
+    const file = $event.target.files.item(0);
+    this.dataService.getSvocDataByFileBPID(file).subscribe(res => {
+      console.log(res);
+      this.tableData= res;
+    },(Error:HttpErrorResponse)=>{
+      this.noRecordsFound();
+    });
+  }
+
+  getSvocDataByFileEID($event: any){
+    const file = $event.target.files.item(0);
+    this.dataService.getSvocDataByFileEID(file).subscribe(res => {
+      console.log(res);
+      this.tableData= res;
     },(Error:HttpErrorResponse)=>{
       this.noRecordsFound();
     });
@@ -118,7 +131,7 @@ export class DataDisplayComponent implements OnInit {
   getDataByEId(id: any){
     this.dataService.getSvocDataByEId(id).subscribe((data: SvocData[]) => {
       this.tableData = data;
-      // this.reload = true;
+      //this.reload = true;
       this.updateProperties()
     },(error:HttpErrorResponse)=>{
       this.noRecordsFound();
@@ -168,21 +181,21 @@ export class DataDisplayComponent implements OnInit {
   clearIdType(){
     this.idType = '';
   }
+
   dropDownOptions : string[] =
   [
+    "EID file",
+    "BPID file",
     "Enterprise-ID",
     "Business partner-ID"
   ];
 
   updateIDs(dropDown: any){
+    this.searchForm.value.ID="";
+    this.getSvocData();
+    this.idType = "";
+    this.searchForm.get('ID')?.reset();
     this.IDSelect = dropDown.target.value;
   };
-
-  upload($event: any){
-    const file = $event.target.files.item(0);
-    this.dataService.getSvocDataByFileEID(file).subscribe(res => {
-      console.log(res);
-    });
-  }
   
 }

@@ -9,12 +9,7 @@
   
   <div class="reload" *ngIf="reload === true && searchForm.value.ID === '' && tableData.length >= 0 && idType !== ''">{{getSvocData()}}{{clearIdType()}}</div>
 
-  <div class="Block" *ngIf="tableData.length>0">
-    <label id="lbl">Upload</label>
-    <input type='file' (change)="upload($event)">
-  </div>
-
-
+ 
 
 <div class="container h">
    <div class="filter">   
@@ -27,11 +22,21 @@
     </form><br>
    </div>
 
+   <div class="Block" *ngIf="tableData.length> 0 && IDSelect === 'BPID file'">
+    <label class="labelEIID" id="lbl">Upload</label>
+    <input type='file' (change)="getSvocDataByFileBPID($event)">
+  </div>
+
+  <div class="Block" *ngIf="tableData.length>0 && IDSelect === 'EID file'">
+    <label class="labelEIID" id="lbl">Upload</label>
+    <input type='file' (change)="getSvocDataByFileEID($event)">
+  </div>
+
     <div class="container-fluid" *ngIf="tableData.length > 0 || searchForm.value.ID?.length">
       <div class="searchBox" *ngIf="IDSelect === 'Business partner-ID'">
         <form [formGroup]="searchForm" (ngSubmit)="getDataByBusiness_partner_ID()">
           <label class="labelEIID"><strong>Business partner_ID</strong> </label>
-          <input formControlName="ID" class="inputBox">
+          <input formControlName="ID" class="inputBox" placeholder="">
           <button class="submitBtn" type="submit">Submit</button>
         </form>
       </div>
@@ -40,7 +45,7 @@
         <div class="searchBox" *ngIf="IDSelect === 'Enterprise-ID'">
           <form [formGroup]="searchForm" (ngSubmit)="getDataByEnterprise_ID()">
             <label class="labelEIID"><strong>Enterprise-ID</strong> </label>
-            <input formControlName="ID" class="inputBox">
+            <input formControlName="ID" class="inputBox" placeholder="">
             <button class="submitBtn" type="submit">Submit</button>
           </form>
         </div><br>
