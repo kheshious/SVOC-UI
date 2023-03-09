@@ -1,6 +1,6 @@
 export interface SvocData {
     enterpriseId: String;
-    super_EID: string;
+    superEid: string;
     systemIdNumber: Number,
     prefered_BP: string;
 }

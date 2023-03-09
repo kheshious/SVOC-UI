@@ -87,6 +87,11 @@ export class DataDisplayComponent implements OnInit {
        this.getDataByEId(this.searchForm.value.ID);
       // this.tableData = this.dataService.dummyError();
     }
+    else if(id?.length === 25){
+      this.idType = 'Super-EID';
+       this.getDataByEId(this.searchForm.value.ID);
+      // this.tableData = this.dataService.dummyError();
+    }
     else{
       this.idType = 'Invalid Enterprise_ID';
       this.noRecordsFound();
