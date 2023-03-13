@@ -89,14 +89,14 @@ tr{
   height:37px !important;
 }
 .labelEIID{
-  margin-left: 20%;
+  margin-left: 5%;
   color:black;
-  margin-top: 8px;
+  // margin-top: 8px;
  
 }
 .inputBox{
   border: solid black 2px;
-  width: 25%;
+  width: 50%;
   // margin-left: 0.5%;
 }
 
@@ -110,13 +110,9 @@ tr{
   color: red;
   text-size-adjust: 40px !important;
 }
-// .searchedBY{
-//   margin-left: 5%;
-//   position: relative;
-// }
+
 pagination-controls{
   float: right !important;
 }
-.filter{
-  margin-left: 2.3%;
-}
+
+
