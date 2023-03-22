@@ -1,11 +1,11 @@
 import { HttpClient, HttpErrorResponse } from '@angular/common/http';
-import { Component, OnInit } from '@angular/core';
+import { Component, OnInit, ViewChild } from '@angular/core';
 import { FormBuilder, FormGroup } from '@angular/forms';
 import { SvocData } from 'src/app/models/svoc-data';
 import { DataService } from 'src/app/services/data.service';
-import { AfterViewInit,ChangeDetectorRef} from '@angular/core';
 import Swal from 'sweetalert2';
-
+import { DownloadFileService } from 'src/app/services/download-file.service';
+// import * as FileSaver from 'file-saver';
 
 @Component({
   selector: 'app-data-display',
@@ -28,14 +28,18 @@ export class DataDisplayComponent implements OnInit {
   fileName: string = '';
   searchForm: FormGroup;
   noRecords: boolean = false;
-  private f_id: string = "";
+  private f_id: string = '';
+  lastIdSearched: string = '';
   fileText: string = "";
-  // public fb: FormBuilder
+  fileDifference: string="";
+  public svocArray = 'SVoC'.split('');
+  @ViewChild('table') table: any;
 
   constructor(
     private dataService: DataService,
     private formBuilder: FormBuilder,
-    private http: HttpClient
+    private http: HttpClient,
+    private downloadReportService: DownloadFileService
   ) {
 
     this.form = this.formBuilder.group({
@@ -48,10 +52,12 @@ export class DataDisplayComponent implements OnInit {
   }
 
   ngOnInit(): void {
-    this.getSvocData();
+    // this.getSvocData();
     
     // this.tableData = this.dataService.getDummyData();
-    
+    if(this.reload === true && this.tableData.length === 0 && this.form.value.ID.length === 0){
+      this.reload = false
+    }
   }
 
   reloadTheWindow() {window.location.reload();}
@@ -60,6 +66,7 @@ export class DataDisplayComponent implements OnInit {
 
   getDataByBusiness_partner_ID(){
     let id = this.searchForm.value.ID + ',';
+    this.lastIdSearched = this.searchForm.value.ID;
     if(id?.indexOf(',')){
       id = id.substring(0, id.indexOf(","));
     }
@@ -78,6 +85,7 @@ export class DataDisplayComponent implements OnInit {
 
   getDataByEnterprise_ID(){
     let id = this.searchForm.value.ID + ',';
+    this.lastIdSearched = this.searchForm.value.ID;
     if(id?.indexOf(',')){
       id = id.substring(0, id.indexOf(","));
     }
@@ -118,6 +126,7 @@ export class DataDisplayComponent implements OnInit {
     this.dataService.getSvocDataByFileBPID(file).subscribe(res => {
       console.log(res);
       this.tableData= res;
+      this.idType='Business_partner_ID';
     },(Error:HttpErrorResponse)=>{
       this.noRecordsFound();
     });
@@ -126,8 +135,10 @@ export class DataDisplayComponent implements OnInit {
   getSvocDataByFileEID($event: any){
     const file = $event.target.files.item(0);
     this.dataService.getSvocDataByFileEID(file).subscribe(res => {
-      console.log(res);
+      // console.log(res);
       this.tableData= res;
+      this.idType = 'Enterprise_IDs';
+      this.fileDifference='fileEid';
     },(Error:HttpErrorResponse)=>{
       this.noRecordsFound();
     });
@@ -136,20 +147,23 @@ export class DataDisplayComponent implements OnInit {
   getDataByEId(id: any){
     this.dataService.getSvocDataByEId(id).subscribe((data: SvocData[]) => {
       this.tableData = data;
-      //this.reload = true;
+      // this.reload = true;
       this.updateProperties()
     },(error:HttpErrorResponse)=>{
+      // console.log('error', error)
       this.noRecordsFound();
+      // console.log(this.reload, this.tableData.length, id)
     });
   }
 
   getDataByBPId(id: any){
     this.dataService.getSvocDataByBpId(id).subscribe((data: SvocData[]) => {
       this.tableData = data;
-      // this.reload = true;
+      this.reload = true;
       this.updateProperties()
     },(error:HttpErrorResponse)=>{
       this.noRecordsFound();
+      // console.log(this.reload, this.tableData.length, id)
     });
   } 
 
@@ -179,7 +193,7 @@ export class DataDisplayComponent implements OnInit {
   }
 
   updateProperties(){
-    // this.reload = true;
+    this.reload = true;
     this.noRecords = false;
   }
 
@@ -197,10 +211,15 @@ export class DataDisplayComponent implements OnInit {
 
   updateIDs(dropDown: any){
     this.searchForm.value.ID="";
-    this.getSvocData();
+    this.lastIdSearched = '';
+    this.tableData = [];
+    this.reload = false;
     this.idType = "";
     this.searchForm.get('ID')?.reset();
     this.IDSelect = dropDown.target.value;
   };
-  
+
+  downloadReport() {
+   this.downloadReportService.downloadReport(this.table);
+  }
 }

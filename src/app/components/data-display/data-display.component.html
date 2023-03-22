@@ -2,19 +2,18 @@
     <img class="standardbanklogo" src="../../../assets/images/Standard_Bank_of_South_Africa_logo.png">
 </div>
 <br><br><br>
-<app-loader *ngIf="!tableData.length && !searchForm.value.ID?.length">{{getSvocData()}}</app-loader>
+<!-- <app-loader *ngIf="!tableData.length && !searchForm.value.ID?.length">{{getSvocData()}}</app-loader> -->
 
-<div class="reload" *ngIf="reload === true && searchForm.value.ID === '' && tableData.length >= 0 && idType !== ''">
-  {{getSvocData()}}{{clearIdType()}}
-</div>
+<!-- <div class="reload" *ngIf="reload === true && searchForm.value.ID === '' && tableData.length >= 0 && idType !== ''">
+   {{clearIdType()}} 
+</div> -->
 
 <div class="container h">
   <br>
   <div class="row">
-
     <div class="col-xs-3 col-md-3">
       <div class="filter">
-        <form *ngIf="tableData.length>0">
+        <form >
           <label> Filter by: </label>
           <select (change)="updateIDs($event)" >
             <option value="default">Select</option>
@@ -25,14 +24,14 @@
     </div>
 
     <div class="col">
-      <div class="container-fluid" *ngIf="tableData.length > 0 || searchForm.value.ID?.length">
+      <div class="container-fluid">
 
-        <div class="searchBox" *ngIf="tableData.length>0 && IDSelect === 'EID file'">
+        <div class="searchBox" *ngIf="IDSelect === 'EID file'">
           <label class="labelEIID" id="lbl">Upload</label>
           <input type='file' (change)="getSvocDataByFileEID($event)">
         </div>
     
-        <div class="searchBox" *ngIf="tableData.length> 0 && IDSelect === 'BPID file'">
+        <div class="searchBox" *ngIf="IDSelect === 'BPID file'">
           <label class="labelEIID" id="lbl">Upload</label>
           <input type='file' (change)="getSvocDataByFileBPID($event)">
         </div>
@@ -55,11 +54,25 @@
           </div>
       </div>
     </div>
+
+    <div class="d-flex justify-content-center m-4 p-4" style="font-size: 13rem; z-index: -4;" 
+    *ngIf="tableData.length === 0 && reload == false">
+      <div class="text" *ngFor="let character of svocArray; let i = index"
+          [ngStyle]="{'color': i === 0 ? 'blue' : i === 1 ? '#ADD8E6' : i === 2 ? 'green' : '#EBF0F1'}">
+        {{ character }}
+      </div>
+    </div>
+
   </div><br>
+
+  <div class="report" *ngIf="tableData.length > 0">
+         <button class="bttn" (click)="downloadReport()">Download Report</button>
+  </div>
    
-  <p *ngIf="idType != ''" class="searchedBY">Searched by <strong>"{{idType}}"</strong> : {{searchForm.value.ID}}</p>
-  <body *ngIf="tableData.length > 0 || searchForm.value.ID?.length">
-    <table id="example" class="table table-striped table-hover table-bordered">
+  <p *ngIf="tableData.length > 0 || lastIdSearched.length && reload == true" class="searchedBY">Searched by <strong>"{{idType}}"</strong> : {{lastIdSearched}}</p>
+
+  <body *ngIf="tableData.length > 0 || lastIdSearched.length && reload == true">
+    <table #table id="example" class="table table-striped table-hover table-bordered">
         <thead>
           <tr class="sticky-top">
             <th scope="col">Enterprise-ID</th>
@@ -69,41 +82,18 @@
           </tr>
         </thead>
         <tbody style="font-size: 12px" *ngIf="tableData.length > 0">
-          <tr *ngFor="let row of tableData | paginate: {
-              itemsPerPage: tableSize,
-              currentPage: page,
-              totalItems: count
-            };
-            let i = index">
-            <td scope="row">{{row.enterpriseId}}</td>
+          <tr *ngFor="let row of tableData let i = index">
+            <td scope="row" *ngIf="idType === 'Enterprise_ID'"><span *ngIf="i===0">{{lastIdSearched}}</span></td>
+            <td scope="row" *ngIf="idType === 'Enterprise_IDs' && fileDifference ==='fileEid'">{{row.enterpriseId}}</td>
+            <td scope="row" *ngIf="idType === 'Business_partner_ID'">{{row.enterpriseId}}</td>
             <td scope="row">{{row.superEid}}</td>
             <td scope="row">{{row.systemIdNumber}}</td>
             <td scope="row">{{row.prefered_BP}}</td>
           </tr>
         </tbody>
-        <tbody *ngIf="tableData.length == 0 || tableData.length == null && searchForm.value.ID?.length && reload == true">
+        <tbody *ngIf="tableData.length == 0 && searchForm.value.ID?.length && reload == true">
           <tr class="noRecords">No record found</tr>
         </tbody>
-    </table>
-
-    <div class="row">
-      <div class="col-xs-5 col-md-4">
-        <p *ngIf="tableData.length > 0">
-          {{tableData.length}} records found
-        </p>
-      </div>
-      
-      <div class="col-xs-7 col-md-8">
-        <pagination-controls
-        *ngIf="tableData.length > 10"
-          previousLabel="Prev"
-          nextLabel="Next"
-          (pageChange)="onTableDataChange($event)"
-        >
-        </pagination-controls>
-      </div>
-
-    </div>
-
+    </table> 
   </body>
 </div>
