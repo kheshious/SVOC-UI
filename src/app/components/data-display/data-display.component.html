@@ -2,11 +2,7 @@
     <img class="standardbanklogo" src="../../../assets/images/Standard_Bank_of_South_Africa_logo.png">
 </div>
 <br><br><br>
-<!-- <app-loader *ngIf="!tableData.length && !searchForm.value.ID?.length">{{getSvocData()}}</app-loader> -->
 
-<!-- <div class="reload" *ngIf="reload === true && searchForm.value.ID === '' && tableData.length >= 0 && idType !== ''">
-   {{clearIdType()}} 
-</div> -->
 
 <div class="container h">
   <br>
@@ -44,7 +40,7 @@
           </form>
         </div>
             
-        <!-- <div class="container-fluid" *ngIf="tableData.length > 0 || searchForm.value.ID?.length"> -->
+       
           <div class="searchBox" *ngIf="IDSelect === 'Enterprise-ID'">
             <form [formGroup]="searchForm" (ngSubmit)="getDataByEnterprise_ID()">
               <label class="labelEIID"><strong>Enterprise-ID</strong> </label>
@@ -55,24 +51,20 @@
       </div>
     </div>
 
-    <div class="d-flex justify-content-center m-4 p-4" style="font-size: 13rem; z-index: -4;" 
-    *ngIf="tableData.length === 0 && reload == false">
-      <div class="text" *ngFor="let character of svocArray; let i = index"
-          [ngStyle]="{'color': i === 0 ? 'blue' : i === 1 ? '#ADD8E6' : i === 2 ? 'green' : '#EBF0F1'}">
-        {{ character }}
-      </div>
-    </div>
-
   </div><br>
 
   <div class="report" *ngIf="tableData.length > 0">
-         <button class="bttn" (click)="downloadReport()">Download Report</button>
+    <button class="bttn" (click)="downloadReport()">Download Report</button>
   </div>
-   
+
+  
+
   <p *ngIf="tableData.length > 0 || lastIdSearched.length && reload == true" class="searchedBY">Searched by <strong>"{{idType}}"</strong> : {{lastIdSearched}}</p>
 
   <body *ngIf="tableData.length > 0 || lastIdSearched.length && reload == true">
-    <table #table id="example" class="table table-striped table-hover table-bordered">
+  
+    <div class="table-responsive-lg" class="ht">
+      <table #table id="example" class="table table-striped table-hover table-bordered ">
         <thead>
           <tr class="sticky-top">
             <th scope="col">Enterprise-ID</th>
@@ -81,12 +73,11 @@
             <th scope="col">Preferred BP Indicator</th>
           </tr>
         </thead>
-        <tbody style="font-size: 12px" *ngIf="tableData.length > 0">
+        <tbody style="font-size:12px;" *ngIf="tableData.length > 0">
           <tr *ngFor="let row of tableData let i = index">
-            <td scope="row" *ngIf="idType === 'Enterprise_ID'"><span *ngIf="i===0">{{lastIdSearched}}</span></td>
-            <td scope="row" *ngIf="idType === 'Enterprise_IDs' && fileDifference ==='fileEid'">{{row.enterpriseId}}</td>
-            <td scope="row" *ngIf="idType === 'Business_partner_ID'">{{row.enterpriseId}}</td>
-            <td scope="row">{{row.superEid}}</td>
+            <td scope="row">{{row.enterpriseId}}</td>
+            <td scope="row" *ngIf="idType === 'Enterprise_ID' && IDSelect==='Enterprise-ID'"><span *ngIf="i===0">{{row.superEid}}</span></td>
+            <td scope="row" *ngIf="IDSelect!=='Enterprise-ID' || idType === 'Super-EID'" ><span>{{row.superEid}}</span></td>
             <td scope="row">{{row.systemIdNumber}}</td>
             <td scope="row">{{row.prefered_BP}}</td>
           </tr>
@@ -94,6 +85,9 @@
         <tbody *ngIf="tableData.length == 0 && searchForm.value.ID?.length && reload == true">
           <tr class="noRecords">No record found</tr>
         </tbody>
-    </table> 
+      </table> 
+    </div>
+   
+    <label>{{tableData.length}} Records Found</label>
   </body>
 </div>

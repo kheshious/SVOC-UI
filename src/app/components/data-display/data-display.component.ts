@@ -5,7 +5,7 @@ import { SvocData } from 'src/app/models/svoc-data';
 import { DataService } from 'src/app/services/data.service';
 import Swal from 'sweetalert2';
 import { DownloadFileService } from 'src/app/services/download-file.service';
-// import * as FileSaver from 'file-saver';
+
 
 @Component({
   selector: 'app-data-display',
@@ -13,7 +13,6 @@ import { DownloadFileService } from 'src/app/services/download-file.service';
   styleUrls: ['./data-display.component.scss']
 })
 export class DataDisplayComponent implements OnInit {
-  form: FormGroup;
   sercheVal: any
   page: number = 1;
   count: number = 0;
@@ -32,7 +31,6 @@ export class DataDisplayComponent implements OnInit {
   lastIdSearched: string = '';
   fileText: string = "";
   fileDifference: string="";
-  public svocArray = 'SVoC'.split('');
   @ViewChild('table') table: any;
 
   constructor(
@@ -42,20 +40,14 @@ export class DataDisplayComponent implements OnInit {
     private downloadReportService: DownloadFileService
   ) {
 
-    this.form = this.formBuilder.group({
-      img: [File]
-    })
-
     this.searchForm = this.formBuilder.group({
       ID: '',
     });
+    
   }
 
   ngOnInit(): void {
-    // this.getSvocData();
-    
-    // this.tableData = this.dataService.getDummyData();
-    if(this.reload === true && this.tableData.length === 0 && this.form.value.ID.length === 0){
+    if(this.reload === true && this.tableData.length === 0 && this.searchForm.value.ID.length === 0){
       this.reload = false
     }
   }
@@ -74,7 +66,6 @@ export class DataDisplayComponent implements OnInit {
     if(id?.length === 10 || id?.length === 9){
       this.idType = 'Business_partner_ID';
       this.getDataByBPId(this.searchForm.value.ID);
-      // this.tableData = this.dataService.dummyError();
     }
     else{
       this.idType = 'Invalid Business_partner_ID';
@@ -93,12 +84,11 @@ export class DataDisplayComponent implements OnInit {
     if(id?.length === 30){
       this.idType = 'Enterprise_ID';
        this.getDataByEId(this.searchForm.value.ID);
-      // this.tableData = this.dataService.dummyError();
     }
     else if(id?.length === 25){
       this.idType = 'Super-EID';
+      this.fileDifference='file-SEID';
        this.getDataByEId(this.searchForm.value.ID);
-      // this.tableData = this.dataService.dummyError();
     }
     else{
       this.idType = 'Invalid Enterprise_ID';
@@ -127,6 +117,7 @@ export class DataDisplayComponent implements OnInit {
       console.log(res);
       this.tableData= res;
       this.idType='Business_partner_ID';
+      this.lastIdSearched = "....."
     },(Error:HttpErrorResponse)=>{
       this.noRecordsFound();
     });
@@ -135,10 +126,10 @@ export class DataDisplayComponent implements OnInit {
   getSvocDataByFileEID($event: any){
     const file = $event.target.files.item(0);
     this.dataService.getSvocDataByFileEID(file).subscribe(res => {
-      // console.log(res);
       this.tableData= res;
-      this.idType = 'Enterprise_IDs';
+      this.idType = 'Enterprise_ID';
       this.fileDifference='fileEid';
+      this.lastIdSearched = "....."
     },(Error:HttpErrorResponse)=>{
       this.noRecordsFound();
     });
@@ -147,12 +138,9 @@ export class DataDisplayComponent implements OnInit {
   getDataByEId(id: any){
     this.dataService.getSvocDataByEId(id).subscribe((data: SvocData[]) => {
       this.tableData = data;
-      // this.reload = true;
       this.updateProperties()
     },(error:HttpErrorResponse)=>{
-      // console.log('error', error)
       this.noRecordsFound();
-      // console.log(this.reload, this.tableData.length, id)
     });
   }
 
@@ -163,7 +151,6 @@ export class DataDisplayComponent implements OnInit {
       this.updateProperties()
     },(error:HttpErrorResponse)=>{
       this.noRecordsFound();
-      // console.log(this.reload, this.tableData.length, id)
     });
   } 
 
@@ -222,4 +209,5 @@ export class DataDisplayComponent implements OnInit {
   downloadReport() {
    this.downloadReportService.downloadReport(this.table);
   }
+
 }
