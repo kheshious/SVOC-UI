@@ -5,6 +5,7 @@ import { SvocData } from 'src/app/models/svoc-data';
 import { DataService } from 'src/app/services/data.service';
 import Swal from 'sweetalert2';
 import { DownloadFileService } from 'src/app/services/download-file.service';
+import { SortDataService } from 'src/app/services/utils/sort-data.service';
 
 
 @Component({
@@ -37,7 +38,8 @@ export class DataDisplayComponent implements OnInit {
     private dataService: DataService,
     private formBuilder: FormBuilder,
     private http: HttpClient,
-    private downloadReportService: DownloadFileService
+    private downloadReportService: DownloadFileService,
+    private dataSortService: SortDataService
   ) {
 
     this.searchForm = this.formBuilder.group({
@@ -54,7 +56,13 @@ export class DataDisplayComponent implements OnInit {
 
   reloadTheWindow() {window.location.reload();}
 
-  
+  sortAscData(data: SvocData[]){
+    return data.sort(this.dataSortService.sortASCBy((h) => h.enterpriseId));
+  }
+
+  sortDescData(data: SvocData[]){
+    return data.sort(this.dataSortService.sortDESCBy((h) => h.enterpriseId));
+  }
 
   getDataByBusiness_partner_ID(){
     let id = this.searchForm.value.ID + ',';

@@ -10,7 +10,7 @@
     <div class="col-xs-3 col-md-3">
       <div class="filter">
         <form >
-          <label> Filter by: </label>
+          <label> Filter by: &nbsp; &nbsp;</label>
           <select (change)="updateIDs($event)" >
             <option value="default">Select</option>
             <option *ngFor="let dropDown of dropDownOptions"><label>{{dropDown}}</label></option>
@@ -23,18 +23,18 @@
       <div class="container-fluid">
 
         <div class="searchBox" *ngIf="IDSelect === 'EID file'">
-          <label class="labelEIID" id="lbl">Upload</label>
+          <label class="labelEIID" id="lbl">Upload <strong>.csv/.txt &nbsp; &nbsp;</strong></label>
           <input type='file' (change)="getSvocDataByFileEID($event)">
         </div>
     
         <div class="searchBox" *ngIf="IDSelect === 'BPID file'">
-          <label class="labelEIID" id="lbl">Upload</label>
+          <label class="labelEIID" id="lbl">Upload <strong>.csv/.txt &nbsp; &nbsp;</strong></label>
           <input type='file' (change)="getSvocDataByFileBPID($event)">
         </div>
     
         <div class="searchBox" *ngIf="IDSelect === 'Business partner-ID'">
           <form [formGroup]="searchForm" (ngSubmit)="getDataByBusiness_partner_ID()">
-            <label class="labelEIID"><strong>Business partner_ID</strong> </label>
+            <label class="labelEIID"><strong>Business partner_ID  &nbsp; &nbsp;</strong> </label>
             <input formControlName="ID" class="inputBox" placeholder="">
             <button class="submitBtn" type="submit">Submit</button>
           </form>
@@ -43,7 +43,7 @@
        
           <div class="searchBox" *ngIf="IDSelect === 'Enterprise-ID'">
             <form [formGroup]="searchForm" (ngSubmit)="getDataByEnterprise_ID()">
-              <label class="labelEIID"><strong>Enterprise-ID</strong> </label>
+              <label class="labelEIID"><strong>Enterprise-ID  &nbsp; &nbsp;</strong> </label>
               <input formControlName="ID" class="inputBox" placeholder="">
               <button class="submitBtn" type="submit">Submit</button>
             </form>
@@ -64,10 +64,10 @@
   <body *ngIf="tableData.length > 0 || lastIdSearched.length && reload == true">
   
     <div class="table-responsive-lg" class="ht">
-      <table #table id="example" class="table table-striped table-hover table-bordered ">
+      <table #table id="example" class="table table-striped table-hover table-bordered table-sm">
         <thead>
           <tr class="sticky-top">
-            <th scope="col">Enterprise-ID</th>
+            <th scope="col" class="th-sm" (click)="sortDescData(tableData)">Enterprise-ID </th>
             <th scope="col">Super-EID</th>
             <th scope="col">BP-Number</th>
             <th scope="col">Preferred BP Indicator</th>
